@@ -161,11 +161,15 @@ function dodgeNo() {
   const btn = document.getElementById('noButton');
   if (!btn) return;
 
-  // Move to a random position immediately
-  const maxX = window.innerWidth  - btn.offsetWidth  - 20;
-  const maxY = window.innerHeight - btn.offsetHeight - 20;
-  btn.style.left = `${Math.max(10, Math.random() * maxX)}px`;
-  btn.style.top  = `${Math.max(10, Math.random() * maxY)}px`;
+  // Move within a central safe zone — always visible, no scrolling required
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const x1 = vw * 0.10;
+  const x2 = vw * 0.90 - btn.offsetWidth;
+  const y1 = vh * 0.18;
+  const y2 = vh * 0.82 - btn.offsetHeight;
+  btn.style.left = `${x1 + Math.random() * Math.max(0, x2 - x1)}px`;
+  btn.style.top  = `${y1 + Math.random() * Math.max(0, y2 - y1)}px`;
 
   // Replay the escape animation
   btn.style.animation = 'none';
