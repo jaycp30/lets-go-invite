@@ -161,13 +161,16 @@ function dodgeNo() {
   const btn = document.getElementById('noButton');
   if (!btn) return;
 
-  // Move within a central safe zone — always visible, no scrolling required
+  // Constrain dodge to the container width, but clamp vertically to visible viewport
+  const container = document.querySelector('.container');
+  const pad = 12;
+  const rect = container ? container.getBoundingClientRect() : null;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
-  const x1 = vw * 0.10;
-  const x2 = vw * 0.90 - btn.offsetWidth;
-  const y1 = vh * 0.18;
-  const y2 = vh * 0.82 - btn.offsetHeight;
+  const x1 = rect ? rect.left  + pad : vw * 0.08;
+  const x2 = rect ? rect.right - btn.offsetWidth  - pad : vw * 0.92 - btn.offsetWidth;
+  const y1 = pad;
+  const y2 = vh - btn.offsetHeight - pad;
   btn.style.left = `${x1 + Math.random() * Math.max(0, x2 - x1)}px`;
   btn.style.top  = `${y1 + Math.random() * Math.max(0, y2 - y1)}px`;
 

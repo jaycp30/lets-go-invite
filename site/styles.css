@@ -296,24 +296,30 @@ textarea {
 }
 .btn-yes:active { transform: scale(0.97); }
 
-/* No — practically invisible */
+/* No — same font/size as Yes! but outlined, always pops against any bg */
 .btn-no {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  background: var(--card);
-  color: var(--text-faint);
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  font-weight: 500;
-  padding: 8px 18px;
+  background: #fff;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 15px 56px;
   border-radius: var(--radius-sm);
-  border: 1.5px solid var(--border-light);
-  transition: left 0.25s ease, top 0.25s ease, border-color 0.15s;
+  border: 2px solid var(--accent-mid);
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 12px rgba(100, 40, 60, 0.14);
+  transition: left 0.25s ease, top 0.25s ease, box-shadow 0.15s;
   cursor: pointer;
+  z-index: 50;
 }
 
-.btn-no:hover { border-color: var(--border); color: var(--text-muted); }
+.btn-no:hover {
+  box-shadow: 0 4px 16px rgba(100, 40, 60, 0.20);
+}
 
 /* ── Preview card ────────────────────────────────────────────────────────────── */
 
