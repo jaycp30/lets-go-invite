@@ -10,11 +10,11 @@
   <div class="page-center">
     <div class="container">
 
-      <div class="invite-hero">
-        <h1 class="invite-name" id="inviteName">Hey! 💝</h1>
+      <div class="invite-hero fade-in">
+        <h1 class="invite-name" id="inviteName">Hey!</h1>
       </div>
 
-      <div class="card">
+      <div class="card fade-in" style="transition-delay: 80ms">
         <p class="invite-message" id="inviteMessage">Loading your invite…</p>
         <div class="invite-details">
           <span class="invite-detail-chip" id="inviteActivity"></span>
@@ -22,14 +22,14 @@
         </div>
       </div>
 
-      <div class="mascot-area">
+      <div class="mascot-area fade-in" style="transition-delay: 160ms">
         <div class="speech-bubble" id="speechBubble"></div>
         <div class="gif-container">
           <img src="https://media1.giphy.com/media/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="mascot">
         </div>
       </div>
 
-      <div class="invite-buttons">
+      <div class="invite-buttons fade-in" style="transition-delay: 240ms">
         <a href="yes.html" class="btn btn-yes">Yes!</a>
         <button class="btn btn-no" id="noButton" onmouseover="dodgeNo()" onclick="dodgeNo()">No</button>
       </div>
@@ -39,5 +39,13 @@
 
   <script src="./config.js"></script>
   <script src="./app.js"></script>
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  </script>
 </body>
 </html>

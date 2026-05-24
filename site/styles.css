@@ -1,21 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
 :root {
-  --bg: #FFF0F5;
-  --card: #FFFFFF;
-  --primary: #D63384;
-  --primary-hover: #B02A6E;
-  --primary-light: #FF6B9D;
-  --accent: #FFD6E7;
-  --accent-dark: #FFB3C6;
-  --text: #1A1A2E;
-  --text-muted: #6B7280;
-  --border: #FFD6E7;
-  --radius: 20px;
-  --radius-sm: 12px;
-  --shadow: 0 4px 24px rgba(214, 51, 132, 0.12);
-  --shadow-hover: 0 8px 32px rgba(214, 51, 132, 0.22);
-  --font: 'Nunito', system-ui, sans-serif;
+  --bg:            #F5F2EE;
+  --card:          #FFFFFF;
+  --border:        #DDD7CE;
+  --border-strong: #B8B0A6;
+  --text:          #1A1714;
+  --text-muted:    #7A7167;
+  --text-faint:    #ADA79F;
+  --accent:        #B83A3A;
+  --accent-light:  #F5ECEC;
+  --radius:        8px;
+  --radius-sm:     4px;
+  --font-body:     'DM Sans', 'Helvetica Neue', system-ui, sans-serif;
+  --font-serif:    'Playfair Display', 'Georgia', serif;
+  --font-mono:     'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
 }
 
 *, *::before, *::after {
@@ -25,20 +24,23 @@
 }
 
 body {
-  font-family: var(--font);
+  font-family: var(--font-body);
   background-color: var(--bg);
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Layout ── */
+/* ── Layout ──────────────────────────────────────────────────────────────────── */
+
 .page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 16px 48px;
+  padding: 56px 16px 80px;
 }
 
 .page-center {
@@ -47,206 +49,227 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
+  padding: 40px 16px;
   text-align: center;
 }
 
 .container {
   width: 100%;
-  max-width: 560px;
+  max-width: 500px;
 }
 
-/* ── Card ── */
+/* ── Card ────────────────────────────────────────────────────────────────────── */
+
 .card {
   background: var(--card);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
   padding: 28px 24px;
   margin-bottom: 20px;
-  border: 1px solid var(--border);
 }
 
-/* ── Typography ── */
-.page-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--primary);
+/* ── Page header ─────────────────────────────────────────────────────────────── */
+
+.page-header {
   text-align: center;
-  margin-bottom: 6px;
+  margin-bottom: 44px;
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 7vw, 3rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  margin-bottom: 10px;
 }
 
 .page-subtitle {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: var(--text-muted);
-  text-align: center;
-  margin-bottom: 28px;
+  line-height: 1.65;
+  max-width: 320px;
+  margin: 0 auto;
 }
 
-.card-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 16px;
+/* ── Card section label ──────────────────────────────────────────────────────── */
+
+.card-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-faint);
+  margin-bottom: 22px;
 }
 
-/* ── Form ── */
+/* ── Form ────────────────────────────────────────────────────────────────────── */
+
 .form-group {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 label {
   display: block;
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--text);
   margin-bottom: 6px;
+}
+
+label .optional {
+  font-weight: 400;
+  color: var(--text-faint);
 }
 
 input[type="text"],
 input[type="datetime-local"],
 textarea {
   width: 100%;
-  padding: 12px 14px;
-  border: 2px solid var(--border);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  font-family: var(--font);
-  font-size: 0.95rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
   color: var(--text);
   background: var(--bg);
-  transition: border-color 0.2s;
+  transition: border-color 0.15s, background 0.15s;
   outline: none;
+  -webkit-appearance: none;
 }
 
 input[type="text"]:focus,
 input[type="datetime-local"]:focus,
 textarea:focus {
-  border-color: var(--primary-light);
+  border-color: var(--border-strong);
   background: #fff;
 }
 
 textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 76px;
 }
 
-/* ── Provider Toggle ── */
+/* ── Provider toggle ─────────────────────────────────────────────────────────── */
+
 .provider-toggle {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   margin-top: 4px;
 }
 
-.provider-option {
-  flex: 1;
-}
+.provider-option       { flex: 1; }
 
-.provider-option input[type="radio"] {
-  display: none;
-}
+.provider-option input[type="radio"] { display: none; }
 
 .provider-label {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 12px 8px;
-  border: 2px solid var(--border);
+  justify-content: center;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 0.825rem;
+  font-weight: 500;
   color: var(--text-muted);
-  transition: all 0.2s;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
   background: var(--bg);
-}
-
-.provider-label .provider-icon {
-  font-size: 1.5rem;
+  user-select: none;
 }
 
 .provider-option input[type="radio"]:checked + .provider-label {
-  border-color: var(--primary);
-  color: var(--primary);
-  background: var(--accent);
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--card);
+  font-weight: 600;
 }
 
-/* ── Buttons ── */
+/* ── Buttons ─────────────────────────────────────────────────────────────────── */
+
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 14px 28px;
+  padding: 12px 24px;
   border: none;
   border-radius: var(--radius-sm);
-  font-family: var(--font);
-  font-size: 1rem;
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background 0.15s, transform 0.1s, border-color 0.15s;
   text-decoration: none;
+  letter-spacing: 0.01em;
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: var(--text);
   color: #fff;
   width: 100%;
+  margin-top: 4px;
 }
 
-.btn-primary:hover:not(:disabled) {
-  background: var(--primary-hover);
-  box-shadow: var(--shadow-hover);
-  transform: translateY(-1px);
-}
-
-.btn-primary:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
+.btn-primary:hover:not(:disabled) { background: #2e2926; }
+.btn-primary:active:not(:disabled) { transform: scale(0.985); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .btn-secondary {
-  background: var(--accent);
-  color: var(--primary);
+  background: transparent;
+  color: var(--text);
   width: 100%;
+  border: 1px solid var(--border);
+  margin-top: 4px;
 }
 
 .btn-secondary:hover {
-  background: var(--accent-dark);
-  transform: translateY(-1px);
+  border-color: var(--border-strong);
+  background: var(--card);
 }
 
+/* Vermillion stamp — decisive, hard to say no to */
 .btn-yes {
-  background: var(--primary);
+  background: var(--accent);
   color: #fff;
-  font-size: 1.1rem;
-  padding: 16px 40px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 14px 52px;
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow);
+  letter-spacing: 0.02em;
 }
 
-.btn-yes:hover {
-  background: var(--primary-hover);
-  box-shadow: var(--shadow-hover);
-  transform: translateY(-2px);
-}
+.btn-yes:hover  { background: #9E2E2E; }
+.btn-yes:active { transform: scale(0.97); }
 
+/* Ghost No — hiding in the corner, barely worth noticing */
 .btn-no {
   position: fixed;
-  background: var(--accent);
-  color: var(--primary);
-  font-size: 1rem;
-  padding: 14px 32px;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--card);
+  color: var(--text-faint);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 8px 20px;
   border-radius: var(--radius-sm);
-  border: 2px solid var(--accent-dark);
+  border: 1px solid var(--border);
   transition: left 0.25s ease, top 0.25s ease;
   cursor: pointer;
 }
 
-/* ── Preview Card ── */
+.btn-no:hover { border-color: var(--border-strong); }
+
+/* ── Preview card ────────────────────────────────────────────────────────────── */
+
 .preview-card {
   display: none;
-  background: linear-gradient(135deg, #FFF0F5 0%, #FFE4F0 100%);
-  border: 2px solid var(--accent-dark);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
   margin-bottom: 20px;
@@ -254,156 +277,144 @@ textarea {
 
 .preview-badge {
   display: inline-block;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: var(--primary);
-  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: var(--bg);
+  color: var(--text-faint);
+  border: 1px solid var(--border);
   margin-bottom: 14px;
+  letter-spacing: 0.03em;
 }
 
 .preview-message {
+  font-family: var(--font-serif);
+  font-style: italic;
   font-size: 1rem;
   color: var(--text);
-  line-height: 1.7;
-  margin-bottom: 14px;
-  font-style: italic;
+  line-height: 1.8;
+  margin-bottom: 16px;
 }
 
 .preview-meta {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 0.775rem;
+  font-weight: 500;
   color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
 }
 
-/* ── Invite Page ── */
+.preview-meta span::before {
+  content: '–';
+  margin-right: 5px;
+  color: var(--text-faint);
+}
+
+/* ── Invite page ─────────────────────────────────────────────────────────────── */
+
 .invite-hero {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .invite-name {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--primary);
-  margin-bottom: 8px;
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 8vw, 3rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
 }
 
 .invite-message {
-  font-size: 1.05rem;
-  color: var(--text);
-  line-height: 1.8;
-  margin-bottom: 20px;
+  font-family: var(--font-serif);
   font-style: italic;
+  font-size: 1.025rem;
+  color: var(--text);
+  line-height: 1.85;
+  margin-bottom: 20px;
 }
 
 .invite-details {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
 .invite-detail-chip {
-  background: var(--accent);
-  color: var(--primary);
-  font-weight: 700;
-  font-size: 0.9rem;
-  padding: 8px 16px;
-  border-radius: 999px;
-  border: 2px solid var(--accent-dark);
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.78rem;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
 }
 
 .gif-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .gif-container img {
-  max-width: 240px;
+  max-width: 220px;
   width: 100%;
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
 .invite-buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  align-items: center;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
-/* ── Mascot + Speech Bubble ── */
+/* ── Mascot + speech bubble ──────────────────────────────────────────────────── */
+
 .mascot-area {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
-}
-
-/* SVG mascot container — replaces the GIF */
-.mascot-svg {
-  width: 140px;
-  height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mascot-svg svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* Mascot preview on generator page */
-.preview-mascot {
-  display: flex;
-  justify-content: center;
-  margin: 12px 0 4px;
-}
-
-.preview-mascot svg {
-  width: 80px;
-  height: 80px;
+  margin-bottom: 28px;
 }
 
 .speech-bubble {
   position: relative;
   background: var(--card);
-  border: 2px solid var(--accent-dark);
-  border-radius: 18px;
-  padding: 10px 18px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 9px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
   text-align: center;
-  max-width: 260px;
-  margin-bottom: 10px;
-  box-shadow: var(--shadow);
+  max-width: 240px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
 
-  /* Hidden by default */
   opacity: 0;
-  transform: translateY(6px) scale(0.95);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(6px) scale(0.97);
+  transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
 }
 
-/* Tail pointing down toward the mascot */
 .speech-bubble::after {
   content: '';
   position: absolute;
-  bottom: -10px;
+  bottom: -9px;
   left: 50%;
   transform: translateX(-50%);
-  border: 10px solid transparent;
-  border-top-color: var(--accent-dark);
+  border: 9px solid transparent;
+  border-top-color: var(--border);
   border-bottom: none;
 }
 
@@ -413,7 +424,7 @@ textarea {
   bottom: -7px;
   left: 50%;
   transform: translateX(-50%);
-  border: 9px solid transparent;
+  border: 8px solid transparent;
   border-top-color: var(--card);
   border-bottom: none;
   z-index: 1;
@@ -425,7 +436,8 @@ textarea {
   pointer-events: auto;
 }
 
-/* ── Confetti ── */
+/* ── Confetti ────────────────────────────────────────────────────────────────── */
+
 #confettiContainer {
   position: fixed;
   inset: 0;
@@ -440,58 +452,40 @@ textarea {
   animation: confettiFall 3s ease-in forwards;
 }
 
-/* ── Yes Page ── */
-.yes-emoji {
-  font-size: 4rem;
-  margin-bottom: 12px;
-}
+/* ── Yes page ────────────────────────────────────────────────────────────────── */
 
 .yes-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: var(--primary);
-  margin-bottom: 8px;
-}
-
-.yes-subtitle {
-  font-size: 1.1rem;
-  color: var(--text-muted);
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 10vw, 4rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
   margin-bottom: 28px;
 }
 
-/* ── Responsive — tablet and up ── */
+/* ── Scroll-entry animation ──────────────────────────────────────────────────── */
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+
 @media (min-width: 480px) {
-  .card {
-    padding: 36px 32px;
-  }
-
-  .page-title {
-    font-size: 2.4rem;
-  }
-
-  .invite-name {
-    font-size: 2.6rem;
-  }
-
-  .yes-title {
-    font-size: 3.4rem;
-  }
-
-  .gif-container img {
-    max-width: 300px;
-  }
+  .card              { padding: 36px 32px; }
+  .gif-container img { max-width: 260px; }
 }
 
 @media (min-width: 768px) {
-  .page {
-    padding: 48px 24px 64px;
-  }
-
-  .page-title {
-    font-size: 2.8rem;
-  }
-
-  .gif-container img {
-    max-width: 340px;
-  }
+  .page              { padding: 72px 24px 96px; }
+  .gif-container img { max-width: 300px; }
 }

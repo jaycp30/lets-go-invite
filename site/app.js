@@ -229,7 +229,7 @@ function createConfetti() {
   const container = document.getElementById('confettiContainer');
   if (!container) return;
 
-  const colors = ['#D63384', '#FF6B9D', '#FFD6E7', '#FFB3C6', '#FF85B3', '#fff', '#c084fc', '#fbbf24'];
+  const colors = ['#B83A3A', '#C47C7C', '#D4A882', '#E8BFBF', '#C4A070', '#D4C4B0', '#9E5050', '#fff'];
 
   for (let i = 0; i < 70; i++) {
     const piece = document.createElement('div');

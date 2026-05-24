@@ -7,18 +7,25 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <!-- Confetti layer (populated by app.js) -->
   <div id="confettiContainer"></div>
 
   <div class="page-center">
     <div class="container">
-      <h1 class="yes-title">Yeeeaahhhh~!!</h1>
-      <div class="gif-container">
+      <h1 class="yes-title fade-in">Yeeeaahhhh~!!</h1>
+      <div class="gif-container fade-in" style="transition-delay: 100ms">
         <img src="https://media.giphy.com/media/Yz2NW6XR6EvmU4uWpa/giphy.gif" alt="celebration">
       </div>
     </div>
   </div>
 
   <script src="./app.js"></script>
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+  </script>
 </body>
 </html>
