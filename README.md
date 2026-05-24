@@ -113,6 +113,32 @@ Manual Lambda upload -> AWS Lambda deploys lambda/
 
 This is important: changing files in `lambda/` and pushing to GitHub does **not** automatically update the live Lambda function unless a separate backend deployment pipeline is added.
 
+### GitHub Commits And Amplify Deployments
+
+Amplify is connected to the GitHub repository branch. When a commit is pushed to that branch, Amplify receives the GitHub event, checks out the new commit, runs `amplify.yml`, and publishes the build artifact.
+
+Because `amplify.yml` publishes only `site/`, any pushed commit can start an Amplify build, but only changes that affect the frontend artifact change the deployed website. Examples:
+
+| Commit/change type | Amplify build triggered? | Live frontend changes? |
+|---|---:|---:|
+| `site/index.html`, `site/app.js`, `site/styles.css` | Yes | Yes |
+| `amplify.yml` | Yes | Yes, build behavior may change |
+| `README.md` only | Yes, unless skipped | No |
+| `lambda/generate.js` only | Yes, unless skipped | No, Lambda is not deployed by Amplify |
+| Git commit with `[skip cd]` | No | No |
+
+So the mental model is:
+
+```text
+GitHub push -> Amplify notices commit -> Amplify builds site/
+```
+
+This is separate from:
+
+```text
+zip lambda/ -> aws lambda update-function-code -> Lambda backend changes
+```
+
 ### Frontend: Amplify Deployment
 
 Amplify is configured by `amplify.yml`:
@@ -137,6 +163,24 @@ Required Amplify environment variable:
 ```text
 API_GATEWAY_URL=https://your-api-id.execute-api.ap-northeast-1.amazonaws.com
 ```
+
+### Skipping Amplify Deployments With `[skip cd]`
+
+For documentation-only commits or other changes that do not need a frontend deploy, add `[skip cd]` as the final line of the commit message:
+
+```text
+docs: expand AWS serverless deployment guide
+
+[skip cd]
+```
+
+Gotchas:
+
+- `[skip cd]` must be the **very last line** of the commit message.
+- Do not put `Co-Authored-By`, notes, or any other text after `[skip cd]`.
+- Use it for README/docs-only commits or notes that should not burn an Amplify build.
+- Do not use it for commits that change `site/` or `amplify.yml`, because those need a frontend deployment.
+- It does not affect Lambda deployment. Lambda is manual in this project either way.
 
 ### Backend: Lambda Deployment
 
