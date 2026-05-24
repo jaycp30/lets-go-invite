@@ -44,6 +44,11 @@ The Lambda needs to exist before Amplify can reference its URL.
 3. Add environment variables to the Lambda:
    - `ANTHROPIC_API_KEY` = your Anthropic key
    - `OPENAI_API_KEY` = your OpenAI key
+   - `SES_FROM_EMAIL` = verified SES sender, e.g. `invites@jaycloud.net`
+   - `SES_REGION` = SES region, e.g. `ap-northeast-1`
+   - `SES_CALENDAR_TIMEZONE` = optional default timezone, e.g. `Europe/London`
+
+For calendar invites, verify your sender domain in Amazon SES, enable production access, and give the Lambda execution role `ses:SendRawEmail`. When a recipient clicks **Yes!**, Lambda sends the sender an email with an `.ics` calendar invite attachment.
 
 ### Step 2 — Create an API Gateway
 
@@ -72,11 +77,11 @@ Every `git push` to your connected branch triggers an automatic redeploy.
 
 ## How the AI generation works
 
-1. You fill in the form (name, activity, date, optional note)
-2. Select **Claude** or **OpenAI** as the provider
-3. Frontend POSTs to `/generate` on your API Gateway
-4. Lambda calls the selected AI API and returns a personalized 2–3 sentence invite message
-5. A shareable `/invite.html?...` link is generated with the message encoded in the URL
+1. You fill in the form (your email, recipient name, activity, date, optional note)
+2. Frontend POSTs to `/generate` on your API Gateway
+3. Lambda uses OpenAI first, then falls back to Claude if needed
+4. A shareable `/invite.html?...` link is generated with the message and sender email encoded in the URL
+5. When the recipient clicks **Yes!**, `/yes.html` POSTs an `acceptInvite` request and Lambda emails the sender an `.ics` calendar invite through Amazon SES
 
 ### Models used
 | Provider | Model | Why |

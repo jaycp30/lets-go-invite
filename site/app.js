@@ -1,4 +1,4 @@
-const APP_VERSION = '202605241545';
+const APP_VERSION = '202605241630';
 window.UNHINGED_CALENDLY_VERSION = APP_VERSION;
 console.info(`[Unhinged Calendly] app.js ${APP_VERSION}`);
 
@@ -47,13 +47,14 @@ if (shareBtn) shareBtn.addEventListener('click', copyShareLink);
 let lastGenerated = {};
 
 async function generateInvite() {
+  const senderEmail = document.getElementById('senderEmail').value.trim();
   const name     = document.getElementById('recipientName').value.trim();
   const activity = document.getElementById('activity').value.trim();
   const date     = document.getElementById('date').value;
   const note     = document.getElementById('note').value.trim();
 
-  if (!name || !activity || !date) {
-    alert('Please fill in name, activity, and date.');
+  if (!senderEmail || !name || !activity || !date) {
+    alert('Please fill in your email, name, activity, and date.');
     return;
   }
 
@@ -71,7 +72,8 @@ async function generateInvite() {
 
     const data = await res.json();
     lastGenerated = {
-      name, activity, date,
+      senderEmail, name, activity, date,
+      senderTz:       Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
       message:        data.message,
       mascotIntro:    data.mascotIntro,
       buttonAnimCSS:  data.buttonAnimCSS  || FALLBACK_BUTTON_ANIM,
@@ -105,10 +107,10 @@ function showPreview(message, activity, date, provider) {
 }
 
 function copyShareLink() {
-  const { name, activity, date, message, mascotIntro, buttonAnimCSS, confettiCSS } = lastGenerated;
+  const { senderEmail, senderTz, name, activity, date, message, mascotIntro, buttonAnimCSS, confettiCSS } = lastGenerated;
   if (!message) return;
 
-  const params = new URLSearchParams({ appv: APP_VERSION, name, activity, date, message });
+  const params = new URLSearchParams({ appv: APP_VERSION, senderEmail, senderTz, name, activity, date, message });
   if (mascotIntro)   params.set('intro',   mascotIntro);
   if (buttonAnimCSS) params.set('btnAnim', buttonAnimCSS);
 
@@ -175,6 +177,13 @@ if (document.getElementById('inviteName')) {
     noBtn.addEventListener('pointerdown', dodgeNo);
     noBtn.addEventListener('click', dodgeNo);
     noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); dodgeNo(); }, { passive: false });
+  }
+
+  const yesBtn = document.querySelector('.btn-yes');
+  if (yesBtn) {
+    const yesParams = new URLSearchParams(window.location.search);
+    yesParams.set('appv', APP_VERSION);
+    yesBtn.href = `yes.html?${yesParams.toString()}`;
   }
 
 }
@@ -278,6 +287,63 @@ if (document.getElementById('confettiContainer')) {
 
   injectCSS(confetti || FALLBACK_CONFETTI_CSS);
   createConfetti();
+  notifyCalendarAcceptance(params);
+}
+
+async function notifyCalendarAcceptance(params) {
+  const status = document.getElementById('calendarStatus');
+  if (!status) return;
+
+  const senderEmail = params.get('senderEmail') || '';
+  const activity = params.get('activity') || '';
+  const date = params.get('date') || '';
+  if (!senderEmail || !activity || !date) {
+    status.textContent = '';
+    return;
+  }
+
+  if (!API_URL) {
+    status.textContent = 'Calendar invite is unavailable in local preview.';
+    status.classList.add('error');
+    return;
+  }
+
+  const key = `calendarInvite:${senderEmail}:${activity}:${date}`;
+  if (sessionStorage.getItem(key)) {
+    status.textContent = 'Calendar invite already sent.';
+    status.classList.add('success');
+    return;
+  }
+
+  status.textContent = 'Sending calendar invite...';
+
+  try {
+    const res = await fetch(`${API_URL}/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'acceptInvite',
+        senderEmail,
+        recipientName: params.get('name') || 'Your guest',
+        activity,
+        date,
+        timezone: params.get('senderTz') || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+        message: params.get('message') || '',
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.ok) throw new Error(data.error || `HTTP ${res.status}`);
+
+    sessionStorage.setItem(key, 'sent');
+    status.textContent = 'Calendar invite sent.';
+    status.classList.remove('error');
+    status.classList.add('success');
+  } catch (err) {
+    console.error(err);
+    status.textContent = 'Could not send the calendar invite.';
+    status.classList.remove('success');
+    status.classList.add('error');
+  }
 }
 
 function createConfetti() {

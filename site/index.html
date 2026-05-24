@@ -23,6 +23,11 @@
         <form id="inviteForm" novalidate>
 
           <div class="form-group">
+            <label for="senderEmail">Your email</label>
+            <input type="email" id="senderEmail" placeholder="e.g. you@gmail.com" required>
+          </div>
+
+          <div class="form-group">
             <label for="recipientName">Their name</label>
             <input type="text" id="recipientName" placeholder="e.g. Sarah" required>
           </div>
@@ -62,7 +67,7 @@
   </div>
 
   <script src="./config.js"></script>
-  <script src="./app.js?v=202605241545"></script>
+  <script src="./app.js?v=202605241630"></script>
   <script>
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
