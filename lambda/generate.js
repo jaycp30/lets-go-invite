@@ -31,8 +31,16 @@ exports.handler = async (event) => {
     }
 
     if (type === 'acceptInvite') {
-      const result = await sendCalendarInvite(body);
-      return respond(200, result);
+      try {
+        const result = await sendCalendarInvite(body);
+        return respond(result.ok === false ? 400 : 200, result);
+      } catch (err) {
+        console.error('acceptInvite failed:', err);
+        return respond(500, {
+          ok: false,
+          error: err.message || 'Failed to send calendar invite',
+        });
+      }
     }
 
     // type === 'invite': run all generations in parallel

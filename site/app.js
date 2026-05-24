@@ -1,4 +1,4 @@
-const APP_VERSION = '202605241700';
+const APP_VERSION = '202605241725';
 window.UNHINGED_CALENDLY_VERSION = APP_VERSION;
 console.info(`[Unhinged Calendly] app.js ${APP_VERSION}`);
 
@@ -340,7 +340,9 @@ async function notifyCalendarAcceptance(params) {
     status.classList.add('success');
   } catch (err) {
     console.error(err);
-    status.textContent = 'Could not send the calendar invite.';
+    status.textContent = err.message
+      ? `Could not send the calendar invite: ${err.message}`
+      : 'Could not send the calendar invite.';
     status.classList.remove('success');
     status.classList.add('error');
   }
