@@ -16,3 +16,6 @@ lambda.zip
 
 # Session handoff files
 handoff_*.md
+
+# Claude Code local config
+.claude/
