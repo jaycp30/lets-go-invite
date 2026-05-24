@@ -1,0 +1,10 @@
+{
+  "name": "invite-generate",
+  "version": "1.0.0",
+  "description": "AI invite generation Lambda — routes to Claude or OpenAI",
+  "main": "generate.js",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "openai": "^4.0.0"
+  }
+}

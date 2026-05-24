@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You've Got an Invite 💝</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-center">
+    <div class="container">
+
+      <div class="invite-hero">
+        <h1 class="invite-name" id="inviteName">Hey! 💝</h1>
+      </div>
+
+      <div class="card">
+        <p class="invite-message" id="inviteMessage">Loading your invite…</p>
+        <div class="invite-details">
+          <span class="invite-detail-chip" id="inviteActivity"></span>
+          <span class="invite-detail-chip" id="inviteDate"></span>
+        </div>
+      </div>
+
+      <!-- Mascot: SVG replaces the GIF, speech bubble sits above -->
+      <div class="mascot-area">
+        <div class="speech-bubble" id="speechBubble"></div>
+        <div class="mascot-svg" id="mascotSvg"></div>
+      </div>
+
+      <div class="invite-buttons">
+        <button class="btn btn-yes" id="yesButton">Yes! 🎉</button>
+        <button class="btn btn-no" id="noButton" onmouseover="dodgeNo()" onclick="dodgeNo()">No</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
