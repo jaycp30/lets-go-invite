@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Lambda build artifact
+lambda.zip
+
+# Local env overrides
+.env
+.env.local
