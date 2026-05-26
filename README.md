@@ -45,7 +45,7 @@ flowchart LR
   end
 
   subgraph External["External services"]
-    I["OpenAI / Anthropic"]
+    I["OpenAI / Amazon Bedrock (Claude)"]
     J["Amazon SES"]
     K["Sender email inbox / calendar app"]
   end
@@ -76,7 +76,7 @@ flowchart LR
 
 ### AI Model Roles
 
-The application uses OpenAI's `gpt-4o-mini` as the primary generator for the personalised invitation message. Anthropic's Claude Haiku supports the app's interactive experience by generating mascot copy and activity-themed animation content, while also providing a fallback for invitation-message generation if the OpenAI request is unavailable or fails.
+The application uses OpenAI's `gpt-4o-mini` as the primary generator for the personalised invitation message. Anthropic's Claude Haiku 4.5, accessed through Amazon Bedrock, supports the app's interactive experience by generating mascot copy and activity-themed animation content, while also providing a fallback for invitation-message generation if the OpenAI request is unavailable or fails.
 
 ## AWS Services In This Project
 
@@ -210,14 +210,16 @@ The wait command matters because AWS may accept the upload before the function i
 Set these on the `invite-generate` Lambda function:
 
 ```text
-ANTHROPIC_API_KEY=...
 OPENAI_API_KEY=...
+AWS_BEARER_TOKEN_BEDROCK=...
+BEDROCK_REGION=ap-northeast-1
+BEDROCK_CLAUDE_MODEL_ID=global.anthropic.claude-haiku-4-5-20251001-v1:0
 SES_FROM_EMAIL=invites@jaycloud.net
 SES_REGION=ap-northeast-1
 SES_CALENDAR_TIMEZONE=Europe/London
 ```
 
-`SES_CALENDAR_TIMEZONE` is optional. The frontend also passes the sender's browser timezone when generating an invite.
+`AWS_BEARER_TOKEN_BEDROCK` is the Amazon Bedrock API key used for this exercise. For a longer-lived workload, prefer granting the Lambda execution role Bedrock invocation permissions instead of storing a long-term API key. `BEDROCK_CLAUDE_MODEL_ID` is optional and defaults to the global Claude Haiku 4.5 inference profile. `SES_CALENDAR_TIMEZONE` is optional. The frontend also passes the sender's browser timezone when generating an invite.
 
 ## SES Calendar Invite Procedure
 

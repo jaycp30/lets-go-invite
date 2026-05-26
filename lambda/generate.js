@@ -1,7 +1,12 @@
-const Anthropic = require('@anthropic-ai/sdk');
+const { BedrockRuntimeClient, ConverseCommand } = require('@aws-sdk/client-bedrock-runtime');
 const OpenAI = require('openai');
 const crypto = require('crypto');
 const https = require('https');
+
+const BEDROCK_REGION = process.env.BEDROCK_REGION || process.env.AWS_REGION || 'ap-northeast-1';
+const CLAUDE_MODEL_ID =
+  process.env.BEDROCK_CLAUDE_MODEL_ID || 'global.anthropic.claude-haiku-4-5-20251001-v1:0';
+const bedrock = new BedrockRuntimeClient({ region: BEDROCK_REGION });
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -401,13 +406,7 @@ async function generateButtonAnimCSS(activity) {
 - STRICT 220 character limit
 - Return ONLY the @keyframes block, nothing else`;
 
-  const client = new Anthropic();
-  const res = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 128,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  return stripFences(res.content[0].text.trim());
+  return stripFences(await generateWithClaude(prompt, { maxTokens: 128 }));
 }
 
 // ── Confetti celebration CSS ──────────────────────────────────────────────────
@@ -419,36 +418,31 @@ async function generateConfettiCSS(activity) {
 - STRICT 220 character limit
 - Return ONLY the @keyframes block, nothing else`;
 
-  const client = new Anthropic();
-  const res = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 128,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  return stripFences(res.content[0].text.trim());
+  return stripFences(await generateWithClaude(prompt, { maxTokens: 128 }));
 }
 
 // ── AI helpers ────────────────────────────────────────────────────────────────
 
 async function generateMascotLine(prompt) {
-  const client = new Anthropic();
-  const res = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 64,
-    system: MASCOT_SYSTEM,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  return res.content[0].text.trim();
+  return generateWithClaude(prompt, { maxTokens: 64, system: MASCOT_SYSTEM });
 }
 
-async function generateWithClaude(prompt) {
-  const client = new Anthropic();
-  const res = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 256,
-    messages: [{ role: 'user', content: prompt }],
-  });
-  return res.content[0].text.trim();
+async function generateWithClaude(prompt, { maxTokens = 256, system } = {}) {
+  const input = {
+    modelId: CLAUDE_MODEL_ID,
+    messages: [{ role: 'user', content: [{ text: prompt }] }],
+    inferenceConfig: { maxTokens },
+  };
+  if (system) {
+    input.system = [{ text: system }];
+  }
+
+  const res = await bedrock.send(new ConverseCommand(input));
+  const text = res.output?.message?.content?.find(content => content.text)?.text;
+  if (!text) {
+    throw new Error('Amazon Bedrock returned no text content');
+  }
+  return text.trim();
 }
 
 async function generateWithOpenAI(prompt) {

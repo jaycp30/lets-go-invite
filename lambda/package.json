@@ -1,10 +1,10 @@
 {
   "name": "invite-generate",
   "version": "1.0.0",
-  "description": "AI invite generation Lambda — routes to Claude or OpenAI",
+  "description": "AI invite generation Lambda - routes to OpenAI or Claude on Amazon Bedrock",
   "main": "generate.js",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.1054.0",
     "openai": "^4.0.0"
   }
 }
