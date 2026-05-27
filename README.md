@@ -266,7 +266,7 @@ Turnstile protects invitation generation before Lambda reserves rate-limit capac
 3. Add the production hostname:
 
    ```text
-   main.d3uvea0sx512tw.amplifyapp.com
+   main.d23hnd7ddlxmg8.amplifyapp.com
    ```
 
 4. Copy the widget **sitekey** and **secret key**.
@@ -280,7 +280,7 @@ Turnstile protects invitation generation before Lambda reserves rate-limit capac
 
    ```text
    TURNSTILE_SECRET_KEY=<secret-key>
-   TURNSTILE_EXPECTED_HOSTNAMES=main.d3uvea0sx512tw.amplifyapp.com
+   TURNSTILE_EXPECTED_HOSTNAMES=main.d23hnd7ddlxmg8.amplifyapp.com
    ```
 
 Do not put `TURNSTILE_SECRET_KEY` in Amplify or `site/config.js`; it must remain server-side in Lambda. If a custom domain is added later, add it to the Turnstile widget and to the comma-separated `TURNSTILE_EXPECTED_HOSTNAMES` value.
@@ -362,7 +362,7 @@ ACCEPTANCE_LOCK_SECONDS=60
 ANONYMOUS_INVITE_DAILY_LIMIT=3
 ANONYMOUS_RATE_LIMIT_SALT=generate-a-long-random-secret
 TURNSTILE_SECRET_KEY=your-private-turnstile-secret-key
-TURNSTILE_EXPECTED_HOSTNAMES=main.d3uvea0sx512tw.amplifyapp.com
+TURNSTILE_EXPECTED_HOSTNAMES=main.d23hnd7ddlxmg8.amplifyapp.com
 ```
 
 `ACCEPTANCE_LOCK_SECONDS` is optional. It allows a later request to retry an invite left in `SENDING` if an invocation stops before finishing.
