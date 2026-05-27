@@ -138,7 +138,7 @@ Because `amplify.yml` publishes only `site/`, any pushed commit can start an Amp
 | `amplify.yml` | Yes | Yes, build behavior may change |
 | `README.md` only | Yes, unless skipped | No |
 | `lambda/generate.js` only | Yes, unless skipped | No, Lambda is not deployed by Amplify |
-| Git commit with `[skip cd]` | No | No |
+| Documentation-only commit | Yes | No functional change unless build configuration changes |
 
 So the mental model is:
 
@@ -178,23 +178,11 @@ API_GATEWAY_URL=https://your-api-id.execute-api.ap-northeast-1.amazonaws.com
 TURNSTILE_SITE_KEY=your-public-turnstile-sitekey
 ```
 
-### Skipping Amplify Deployments With `[skip cd]`
+### Documentation-Only Commits
 
-For documentation-only commits or other changes that do not need a frontend deploy, add `[skip cd]` as the final line of the commit message:
+Documentation-only commits currently still trigger an Amplify build and deployment for this connected branch. For example, a commit ending in `[skip cd]` on May 27, 2026 still ran successful `BUILD`, `DEPLOY`, and `VERIFY` steps.
 
-```text
-docs: expand AWS serverless deployment guide
-
-[skip cd]
-```
-
-Gotchas:
-
-- `[skip cd]` must be the **very last line** of the commit message.
-- Do not put `Co-Authored-By`, notes, or any other text after `[skip cd]`.
-- Use it for README/docs-only commits or notes that should not burn an Amplify build.
-- Do not use it for commits that change `site/` or `amplify.yml`, because those need a frontend deployment.
-- It does not affect Lambda deployment. Lambda is manual in this project either way.
+Do not rely on `[skip cd]` to avoid Amplify builds in this project. Lambda deployment remains separate either way: a GitHub push does not upload backend code to Lambda.
 
 ### Backend: Lambda Deployment
 
