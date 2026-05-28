@@ -48,8 +48,9 @@ exports.handler = async (event) => {
     const type = body.type || 'invite';
 
     if (type === 'reaction') {
-      const reaction = await generateReaction();
-      return respond(200, { reaction });
+      return respond(410, {
+        error: 'AI reaction generation has been retired. Use client-side fallback reactions.',
+      });
     }
 
     if (type === 'acceptInvite') {
@@ -109,9 +110,10 @@ exports.handler = async (event) => {
       }, { 'Retry-After': String(retryAfterSeconds) });
     }
 
-    const [[message, usedProvider], mascotIntro, buttonAnimCSS, confettiCSS] = await Promise.all([
+    const [[message, usedProvider], mascotIntro, mascotReactions, buttonAnimCSS, confettiCSS] = await Promise.all([
       generateInviteMessage(name, activity, date, note),
       generateMascotIntro(name, activity),
+      generateMascotReactions(activity),
       generateButtonAnimCSS(activity),
       generateConfettiCSS(activity),
     ]);
@@ -128,6 +130,7 @@ exports.handler = async (event) => {
         timezone: timezone || 'UTC',
         message,
         mascotIntro,
+        mascotReactions,
         buttonAnimCSS,
         confettiCSS,
         status: 'CREATED',
@@ -140,6 +143,7 @@ exports.handler = async (event) => {
       inviteId,
       message,
       mascotIntro,
+      mascotReactions,
       buttonAnimCSS,
       confettiCSS,
       provider: usedProvider,
@@ -290,6 +294,7 @@ async function getPublicInvite(inviteId) {
       date: invite.date,
       message: invite.message,
       mascotIntro: invite.mascotIntro,
+      mascotReactions: invite.mascotReactions,
       buttonAnimCSS: invite.buttonAnimCSS,
       confettiCSS: invite.confettiCSS,
     },
@@ -512,19 +517,28 @@ async function generateMascotIntro(name, activity) {
   return generateMascotLine(prompt);
 }
 
-// ── No button reaction ────────────────────────────────────────────────────────
+async function generateMascotReactions(activity) {
+  const prompt = `Create 12 short mascot reactions for when someone tries to click "No" on a date invitation for "${activity}" and the button escapes.
+- Match the activity theme
+- Mischievous, playful, cute, teasing
+- Max 8 words each
+- No heart or love emojis
+- Return a JSON array of strings only`;
+  return parseMascotReactions(await generateWithClaude(prompt, { maxTokens: 220, system: MASCOT_SYSTEM }));
+}
 
-async function generateReaction() {
-  const moods = [
-    'surprised and giggling',
-    'dramatically heartbroken',
-    'smug and knowing',
-    'playfully suspicious',
-    'encouragingly persistent',
-  ];
-  const mood = moods[Math.floor(Math.random() * moods.length)];
-  const prompt = `Someone tried to click "No" on a date invitation but the button escaped. React in a ${mood} way. Max 8 words + 1 emoji.`;
-  return generateMascotLine(prompt);
+function parseMascotReactions(text) {
+  let parsed;
+  try {
+    parsed = JSON.parse(stripFences(text));
+  } catch {
+    parsed = [];
+  }
+  return parsed
+    .filter(value => typeof value === 'string')
+    .map(value => value.trim())
+    .filter(Boolean)
+    .slice(0, 12);
 }
 
 // ── SES calendar invite on Yes ────────────────────────────────────────────────

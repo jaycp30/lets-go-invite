@@ -1,4 +1,4 @@
-const APP_VERSION = '20260527-recipient-invite-complete';
+const APP_VERSION = '20260528-stored-ai-reactions';
 window.UNHINGED_CALENDLY_VERSION = APP_VERSION;
 console.info(`[Unhinged Calendly] app.js ${APP_VERSION}`);
 
@@ -194,8 +194,8 @@ function formatDate(raw) {
 // ── No button state ──────────────────────────────────────────────────────────
 
 let bubbleTimer = null;
-let isFetching  = false;
 let lastDodgeAt = 0;
+let inviteReactions = FALLBACK_REACTIONS;
 
 // ── Invite page (invite.html) ─────────────────────────────────────────────────
 
@@ -223,6 +223,9 @@ async function loadInvitePage() {
     document.getElementById('inviteDate').textContent     = data.date ? formatDate(data.date) : '';
 
     injectCSS(data.buttonAnimCSS || FALLBACK_BUTTON_ANIM);
+    inviteReactions = Array.isArray(data.mascotReactions) && data.mascotReactions.length > 0
+      ? data.mascotReactions
+      : FALLBACK_REACTIONS;
     if (data.mascotIntro) showSpeechBubble(data.mascotIntro, 4000);
 
     initializeNoButton();
@@ -315,30 +318,9 @@ function dodgeNo() {
   btn.offsetHeight; // force reflow so animation restarts
   btn.style.animation = 'noEscape 0.45s ease';
 
-  // Show instant fallback reaction, then replace with AI line
-  const fallback = FALLBACK_REACTIONS[Math.floor(Math.random() * FALLBACK_REACTIONS.length)];
-  showSpeechBubble(fallback, null);
-
-  if (!isFetching) fetchReaction();
-}
-
-async function fetchReaction() {
-  if (!API_URL) { scheduleBubbleHide(3000); return; }
-  isFetching = true;
-  try {
-    const res = await fetch(`${API_URL}/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'reaction' }),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    showSpeechBubble(data.reaction, 3000);
-  } catch {
-    scheduleBubbleHide(3000);
-  } finally {
-    isFetching = false;
-  }
+  // Reuse invite-scoped AI reactions; no public hover/click can invoke a model.
+  const reaction = inviteReactions[Math.floor(Math.random() * inviteReactions.length)];
+  showSpeechBubble(reaction, 3000);
 }
 
 function showSpeechBubble(text, autohideMs) {

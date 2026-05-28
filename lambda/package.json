@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "AI invite generation Lambda - routes to OpenAI or Claude on Amazon Bedrock",
   "main": "generate.js",
+  "scripts": {
+    "test": "node --test"
+  },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1054.0",
     "@aws-sdk/client-dynamodb": "^3.1054.0",

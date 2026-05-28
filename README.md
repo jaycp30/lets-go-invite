@@ -46,6 +46,8 @@ invite_Claude-exercise/
 
 The application uses OpenAI's `gpt-4o-mini` as the primary generator for the personalised invitation message. Anthropic's Claude Haiku 4.5, accessed through Amazon Bedrock, supports the app's interactive experience by generating mascot copy and activity-themed animation content, while also providing a fallback for invitation-message generation if the OpenAI request is unavailable or fails.
 
+No-button reactions on the public invite page are generated once during protected invite creation, using the invitation activity as context, then stored with the invite and reused client-side. The retired public `type: reaction` Lambda operation returns HTTP `410` and does not invoke Bedrock, so repeated hover/click interactions on the public invite page cannot create unbounded model spend. Older invites without stored reactions use the local fallback copy.
+
 ## AWS Services In This Project
 
 ### What Is AWS Amplify?
